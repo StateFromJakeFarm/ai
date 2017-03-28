@@ -1,9 +1,19 @@
 #include <iostream>
+#include <climits>
 #include <cmath>
 #include <iomanip>
 #include <vector>
 
 using namespace std;
+
+double d(vector<int> q, vector<int> x) {
+    double res = 0;
+    for(unsigned int i=0; i<q.size(); i++) {
+        res += pow(q[i]-x[i], 2);
+    }
+
+    return pow(res, 0.5);
+}
 
 int main() {
     int M, D, N;
@@ -62,8 +72,59 @@ int main() {
         }
     }
 
+    // print weights
     for(int i=0; i<D+1; i++)
         cout << fixed << showpoint << setprecision(12) << W[i] << endl;
+
+    // h(Q)
+    double h = 0;
+    for(int i=0; i<D+1; i++) {
+        h += W[i]*Q[i];
+    }
+    if(h < h-1)
+        cout << 0 << endl;
+    else
+        cout << 1 << endl;
+
+    // KNN k=5
+    int k=5;
+    int nears[5];
+    int nearsIndeces[5];
+    for(int i=0; i<k; i++)
+        nears[i] = INT_MAX;
+
+    for(int i=0; i<M-1; i++) {
+        double dist = d(Q, X[i]);
+
+        // keep track of k nearest neighbors
+        for(int j=0; j<k; j++) {
+            if(nears[j] > dist) {
+                double cur = nears[j];
+                nears[j] = dist;
+                nearsIndeces[j] = i;
+
+                // shift everything after insert
+                for(int q=j+1; q<D+1; q++) {
+                    double next = nears[q];
+                    nears[q] = cur;
+                    cur = next;
+                }
+            }
+        }
+    }
+
+    int total0 = 0;
+    int total1 = 0;
+    for(int i=0; i<k; i++) {
+        if(X[nearsIndeces[i]][D+2] == 0)
+            ++total0;
+        else
+            ++total1;
+    }
+    if(total0 > total1)
+        cout << 0 << endl;
+    else
+        cout << 1 << endl;
 
     return 0;
 }

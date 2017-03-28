@@ -17,13 +17,13 @@ int main() {
 
     vector<double> answers;
 
-    vector< vector<int> > data;
+    vector< vector<double> > data;
     data.resize(M);
     for(int r=0; r<M; r++) {
         // add dummy value
         data[r].push_back(1);
         for(int c=0; c<D+1; c++) {
-            int val;
+            double val;
             cin >> val;
 
             if(c != D)
@@ -37,11 +37,8 @@ int main() {
     for(int n=0; n<N; n++) {
         // get projections from current weights h(Xj)
         vector<double> projections;
-
-        // each data vector
         for(int x=0; x<M; x++) {
             double projection = 0;
-            // each element of each data vector
             for(int i=0; i<D+1; i++) {
                 projection += data[x][i]*weights[i];
             }
@@ -49,11 +46,11 @@ int main() {
             projections.push_back(projection);
         }
 
-        for(int w=0; w<D+1; w++) {
+        // update weights
+        for(int i=0; i<D+1; i++) {
             for(int x=0; x<M; x++) {
-                weights[w] += a*data[x][w]*(answers[w]-projections[w]);
+                weights[i] += a*data[x][i]*(answers[x]-projections[x]);
             }
-            weights[w] += weights[w];
         }
     }
 

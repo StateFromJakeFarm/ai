@@ -81,7 +81,7 @@ int main() {
     for(int i=0; i<D+1; i++) {
         h += W[i]*Q[i];
     }
-    if(h < h-1)
+    if(h < 0.5)
         cout << 0 << endl;
     else
         cout << 1 << endl;
@@ -116,7 +116,7 @@ int main() {
     int total0 = 0;
     int total1 = 0;
     for(int i=0; i<k; i++) {
-        if(X[nearsIndeces[i]][D+2] == 0)
+        if(Y[nearsIndeces[i]] == 0)
             ++total0;
         else
             ++total1;
@@ -128,17 +128,3 @@ int main() {
 
     return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

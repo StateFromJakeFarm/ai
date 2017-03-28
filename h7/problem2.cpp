@@ -13,7 +13,7 @@ int main() {
 
     // init weights
     vector<double> W;
-    for(int j=0; j<D; j++)
+    for(int j=0; j<D+1; j++)
         W.push_back(1);
 
     // build vectors for train data and classifications
@@ -24,7 +24,10 @@ int main() {
     X.resize(M-1);
     for(int j=0; j<M; j++) {
         // dummy weights
-        X[j].push_back(1);
+        if(j != M-1)
+            X[j].push_back(1);
+        else
+            Q.push_back(1);
         for(int i=0; i<D+1; i++) {
             int cur;
             cin >> cur;
@@ -45,7 +48,7 @@ int main() {
         for(int j=0; j<M-1; j++) {
             // get -w <dot> x
             double WdotX = 0;
-            for(int i=0; i<D; i++) {
+            for(int i=0; i<D+1; i++) {
                 WdotX += W[i]*X[j][i];
             }
 
@@ -53,13 +56,13 @@ int main() {
             double hj = 1.0 / (1.0 + exp(-1.0*WdotX));
 
             // update all weights
-            for(int i=0; i<D; i++) {
-                W[i] = W[i] + a*(Y[i]-hj)*hj*(1-hj)*X[j][i];
+            for(int i=0; i<D+1; i++) {
+                W[i] += a*(Y[j]-hj)*hj*(1-hj)*X[j][i];
             }
         }
     }
 
-    for(int i=0; i<D; i++)
+    for(int i=0; i<D+1; i++)
         cout << fixed << showpoint << setprecision(12) << W[i] << endl;
 
     return 0;

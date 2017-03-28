@@ -11,14 +11,15 @@ int main() {
     cin >> M >> D >> N >> a;
 
     vector<double> weights;
+    for(int i=0; i<D+1; i++) {
+        weights.push_back(1);
+    }
+
     vector<double> answers;
 
     vector< vector<int> > data;
     data.resize(M);
     for(int r=0; r<M; r++) {
-        // start with all weights = 1
-        weights.push_back(1);
-
         // add dummy value
         data[r].push_back(1);
         for(int c=0; c<D+1; c++) {
@@ -48,19 +49,16 @@ int main() {
             projections.push_back(projection);
         }
 
-        for(int x=0; x<M; x++) {
-            for(int i=0; i<D+1; i++) {
-
+        for(int w=0; w<D+1; w++) {
+            for(int x=0; x<M; x++) {
+                weights[w] += a*data[x][w]*(answers[w]-projections[w]);
             }
-        }
-
-        for(int w=0; w<M; w++) {
-            
+            weights[w] += weights[w];
         }
     }
 
     // print final weights
-    for(int w=0; w<M; w++)
+    for(int w=0; w<D+1; w++)
         cout << fixed << showpoint << setprecision(12) << weights[w] << endl;
 
     return 0;

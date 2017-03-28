@@ -41,15 +41,21 @@ int main() {
         for(int x=0; x<M; x++) {
             double projection = 0;
             // each element of each data vector
-            for(int i=0; i<D; i++) {
+            for(int i=0; i<D+1; i++) {
                 projection += data[x][i]*weights[i];
             }
 
             projections.push_back(projection);
         }
 
-        for(int w=0; w<M; w++) {
+        for(int x=0; x<M; x++) {
+            for(int i=0; i<D+1; i++) {
 
+            }
+        }
+
+        for(int w=0; w<M; w++) {
+            
         }
     }
 

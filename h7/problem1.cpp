@@ -15,15 +15,15 @@ int main() {
         weights.push_back(1);
     }
 
-    vector<double> answers;
+    vector<int> answers;
 
-    vector< vector<double> > data;
+    vector< vector<int> > data;
     data.resize(M);
     for(int r=0; r<M; r++) {
         // add dummy value
         data[r].push_back(1);
         for(int c=0; c<D+1; c++) {
-            double val;
+            int val;
             cin >> val;
 
             if(c != D)

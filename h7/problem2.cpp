@@ -15,6 +15,14 @@ double d(vector<int> q, vector<int> x) {
     return pow(res, 0.5);
 }
 
+double h(vector<double> W, vector<int> X) {
+    double WdotX = 0;
+    for(unsigned int i=0; i<W.size(); i++)
+        WdotX += W[i]*X[i];
+
+    return 1.0 / (1.0 + exp(-1.0*WdotX));
+}
+
 int main() {
     int M, D, N;
     double a;
@@ -56,14 +64,7 @@ int main() {
     // main iteration loop
     for(int n=0; n<N; n++) {
         for(int j=0; j<M-1; j++) {
-            // get -w <dot> x
-            double WdotX = 0;
-            for(int i=0; i<D+1; i++) {
-                WdotX += W[i]*X[j][i];
-            }
-
-            // get h(Xj)
-            double hj = 1.0 / (1.0 + exp(-1.0*WdotX));
+            double hj = h(W, X[j]);
 
             // update all weights
             for(int i=0; i<D+1; i++) {
@@ -77,11 +78,10 @@ int main() {
         cout << fixed << showpoint << setprecision(12) << W[i] << endl;
 
     // h(Q)
-    double h = 0;
-    for(int i=0; i<D+1; i++) {
-        h += W[i]*Q[i];
-    }
-    if(h < 0.5)
+    double myH = h(W, Q);
+    double d0 = pow( pow(myH-0, 2), 0.5);
+    double d1 = pow( pow(myH-1, 2), 0.5);
+    if(d0 < d1)
         cout << 0 << endl;
     else
         cout << 1 << endl;

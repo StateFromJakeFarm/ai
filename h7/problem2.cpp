@@ -79,44 +79,40 @@ int main() {
 
     // h(Q)
     double myH = h(W, Q);
-    double d0 = pow( pow(myH-0, 2), 0.5);
-    double d1 = pow( pow(myH-1, 2), 0.5);
+    double d0 = pow(pow(myH-0, 2), 0.5);
+    double d1 = pow(pow(myH-1, 2), 0.5);
     if(d0 < d1)
         cout << 0 << endl;
     else
         cout << 1 << endl;
 
     // KNN k=5
-    int k=5;
-    int nears[5];
-    int nearsIndeces[5];
-    for(int i=0; i<k; i++)
-        nears[i] = INT_MAX;
+    int k = 5;
+    vector<double> allDist;
+    for(int i=0; i<M-1; i++)
+        allDist.push_back(d(Q, X[i]));
 
-    for(int i=0; i<M-1; i++) {
-        double dist = d(Q, X[i]);
-
-        // keep track of k nearest neighbors
-        for(int j=0; j<k; j++) {
-            if(nears[j] > dist) {
-                double cur = nears[j];
-                nears[j] = dist;
-                nearsIndeces[j] = i;
-
-                // shift everything after insert
-                for(int q=j+1; q<D+1; q++) {
-                    double next = nears[q];
-                    nears[q] = cur;
-                    cur = next;
-                }
+    vector<int> nearIndeces;
+    double lowestVal = INT_MAX;
+    int lowestIndex;
+    for(int i=0; i<k; i++) {
+        for(int j=0; j<M-1; j++) {
+            double curVal = allDist[j];
+            if(curVal < lowestVal) {
+                lowestVal = curVal;
+                lowestIndex = j;
             }
         }
+
+        nearIndeces.push_back(lowestIndex);
+        allDist[lowestIndex] = INT_MAX;
+        lowestVal = INT_MAX;
     }
 
     int total0 = 0;
     int total1 = 0;
     for(int i=0; i<k; i++) {
-        if(Y[nearsIndeces[i]] == 0)
+        if(Y[nearIndeces[i]] == 0)
             ++total0;
         else
             ++total1;

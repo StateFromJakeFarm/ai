@@ -6,11 +6,11 @@ using namespace std;
 
 int main() {
     int M, D, N;
-    double a;
+    long double a;
 
     cin >> M >> D >> N >> a;
 
-    vector<double> weights;
+    vector<long double> weights;
     for(int i=0; i<D+1; i++) {
         weights.push_back(1);
     }
@@ -36,9 +36,9 @@ int main() {
     // main iteration loop
     for(int n=0; n<N; n++) {
         // get projections from current weights h(Xj)
-        vector<double> projections;
+        vector<long double> projections;
         for(int x=0; x<M; x++) {
-            double projection = 0;
+            long double projection = 0;
             for(int i=0; i<D+1; i++) {
                 projection += data[x][i]*weights[i];
             }

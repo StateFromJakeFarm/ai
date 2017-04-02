@@ -1,10 +1,11 @@
 #include "ann.h"
 
-ANN::ANN(string train_input, string train_out, string test_input, string structure, string weights, string encoding, long double a, int numIters) {
+ANN::ANN(string train_input, string train_out, string test_input, string test_out, string structure, string weights, string encoding, long double a, int numIters) {
     constructLayers(structure);
     getWeights(weights);
     getDigitEncodings(encoding);
-    getOuts(train_out);
+    getOuts(train_out, trainOuts);
+    getOuts(test_out, testOuts);
     getIns(train_input, trainIns);
     getIns(test_input, testIns);
 }
@@ -38,3 +39,71 @@ void ANN::getWeights(string fname) {
 
     f.close();
 }
+
+void ANN::getDigitEncodings(string fname) {
+    ifstream f(fname.c_str());
+
+    long double curVal;
+    for(int d=0; d<10; d++) {
+        for(int i=0; i<10; i++) {
+            f >> curVal;
+            encodings[d][i] = curVal;
+        }
+    }
+
+    f.close();
+}
+
+void ANN::getIns(string fname, vector< vector<long double> > &inputs) {
+    ifstream f(fname.c_str());
+
+    int numInputNeurons = layers[0].size();
+
+    int curLine = 0;
+    string line;
+    long double inVal;
+    while(getline(f, line)) {
+        inputs.resize(inputs.size()+1);
+
+        istringstream ss(line);
+
+        for(int i=0; i<numInputNeurons; i++) {
+            ss >> curVal;
+            inputs[curLine].push_back(curVal);
+        }
+    }
+
+    f.close();
+}
+
+void ANN::getOuts(string fname, vector<long double> &outputs) {
+    ifstream f(fname.c_str());
+
+    long double curVal;
+    for(unsigned int i=0; i<outputs.size(); i++) {
+        f >> curVal;
+        outputs.push_back(curVal);
+    }
+
+    f.close();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

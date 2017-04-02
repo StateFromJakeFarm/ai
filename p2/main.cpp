@@ -1,7 +1,5 @@
 #include <iostream>
-#include <fstream>
 #include <iomanip>
-#include <vector>
 #include <string>
 #include "ann.h"
 

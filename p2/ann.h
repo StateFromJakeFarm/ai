@@ -20,14 +20,18 @@ class ANN {
     };
 
     vector< vector<Neuron> > layers;
+
     vector< vector<long double> > trainIns;
     vector<long double> trainOuts;
     vector< vector<long double> > testIns;
 
+    void constructLayers(string);
+    void getWeights(string);
+    void getDigitEncodings(string);
+    void getIns(string, vector< vector<long double> >);
+    void getOuts(string);
+
+
     public:
-    void constructLayers(string fname);
-    void getWeights(string fname);
-    void getDigitEncodings(string fname);
-    void getIns(string fname);
-    void getOuts(string fname);
+    ANN(string, string, string, string, string, string, long double, int);
 };

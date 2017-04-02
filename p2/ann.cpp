@@ -24,4 +24,17 @@ void ANN::constructLayers(string fname) {
 }
 
 void ANN::getWeights(string fname) {
+    ifstream f(fname.c_str());
+
+    long double curWeight;
+    for(unsigned int l=0; l<layers.size(); l++) {
+        for(unsigned int i=0; i<layers[l].size(); i++) {
+            for(unsigned int n=0; n<layers[i+1].size(); i++) {
+                f >> curWeight;
+                weights[i][n] = curWeight;
+            }
+        }
+    }
+
+    f.close();
 }

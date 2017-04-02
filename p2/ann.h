@@ -16,10 +16,10 @@ class ANN {
         public:
         long double ai;
         long double in;
-        vector< pair<int, long double> > inWeights;
     };
 
     vector< vector<Neuron> > layers;
+    vector< vector<long double> > weights;
 
     vector< vector<long double> > trainIns;
     vector<long double> trainOuts;

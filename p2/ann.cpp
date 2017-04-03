@@ -32,9 +32,10 @@ void ANN::getWeights(char* fname) {
 
     int curNeuron = 0;
     long double curWeight;
-    for(unsigned int l=0; l<layers.size(); l++) {
+    for(unsigned int l=0; l<layers.size()-1; l++) {
         for(unsigned int i=0; i<layers[l].size(); i++) {
-            for(unsigned int n=0; n<layers[i+1].size(); i++) {
+            weights.resize(weights.size()+1);
+            for(unsigned int n=0; n<layers[i+1].size(); n++) {
                 f >> curWeight;
                 weights[curNeuron].push_back(curWeight);
             }
@@ -44,6 +45,13 @@ void ANN::getWeights(char* fname) {
     }
 
     f.close();
+
+    for(unsigned int i=0; i<weights.size(); i++) {
+        for(unsigned int n=0; n<weights[i].size(); i++) {
+            cout << weights[i][n] << " ";
+        }
+        cout << endl;
+    }
 }
 
 void ANN::getDigitEncodings(char* fname) {

@@ -1,31 +1,34 @@
 #include "ann.h"
 
-ANN::ANN(string train_input, string train_out, string test_input, string test_out, string structure, string weights, string encoding, long double a, int numIters) {
+ANN::ANN(char* train_input, char* train_out, char* test_input, char* test_out, char* structure, char* weights, char* encoding, long double a, int numIters) {
     constructLayers(structure);
     getWeights(weights);
-    getDigitEncodings(encoding);
-    getOuts(train_out, trainOuts);
-    getOuts(test_out, testOuts);
-    getIns(train_input, trainIns);
-    getIns(test_input, testIns);
+//    getDigitEncodings(encoding);
+//    getOuts(train_out, trainOuts);
+//    getOuts(test_out, testOuts);
+//    getIns(train_input, trainIns);
+//    getIns(test_input, testIns);
+
+    alpha = a;
+    k = numIters;
 }
 
-void ANN::constructLayers(string fname) {
-    ifstream f(fname.c_str());
+void ANN::constructLayers(char* fname) {
+    ifstream f(fname);
 
     int numNodes;
     int curSize;
     while(f >> numNodes) {
         int curSize = layers.size();
         layers.resize(curSize+1);
-        layers[curSize-1].resize(numNodes);
+        layers[curSize].resize(numNodes);
     }
 
     f.close();
 }
 
-void ANN::getWeights(string fname) {
-    ifstream f(fname.c_str());
+void ANN::getWeights(char* fname) {
+    ifstream f(fname);
 
     int curNeuron = 0;
     long double curWeight;
@@ -43,8 +46,8 @@ void ANN::getWeights(string fname) {
     f.close();
 }
 
-void ANN::getDigitEncodings(string fname) {
-    ifstream f(fname.c_str());
+void ANN::getDigitEncodings(char* fname) {
+    ifstream f(fname);
 
     long double curVal;
     for(int d=0; d<10; d++) {
@@ -57,14 +60,14 @@ void ANN::getDigitEncodings(string fname) {
     f.close();
 }
 
-void ANN::getIns(string fname, vector< vector<long double> > &inputs) {
-    ifstream f(fname.c_str());
+void ANN::getIns(char* fname, vector< vector<long double> > &inputs) {
+    ifstream f(fname);
 
     int numInputNeurons = layers[0].size();
 
     int curLine = 0;
     string line;
-    long double inVal;
+    long double curVal;
     while(getline(f, line)) {
         inputs.resize(inputs.size()+1);
 
@@ -79,8 +82,8 @@ void ANN::getIns(string fname, vector< vector<long double> > &inputs) {
     f.close();
 }
 
-void ANN::getOuts(string fname, vector<long double> &outputs) {
-    ifstream f(fname.c_str());
+void ANN::getOuts(char* fname, vector<long double> &outputs) {
+    ifstream f(fname);
 
     long double curVal;
     for(unsigned int i=0; i<outputs.size(); i++) {
@@ -91,7 +94,13 @@ void ANN::getOuts(string fname, vector<long double> &outputs) {
     f.close();
 }
 
+long double ANN::getIn(int l, int n) {
+    return 1;
+}
 
+void ANN::g(int l, int n) {
+    
+}
 
 
 

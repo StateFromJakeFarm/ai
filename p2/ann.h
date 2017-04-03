@@ -3,8 +3,8 @@
 #include <sstream>
 #include <iomanip>
 #include <vector>
-#include <string>
 #include <utility>
+#include <string>
 
 using namespace std;
 
@@ -15,7 +15,7 @@ class ANN {
 
     class Neuron {
         public:
-        long double ai;
+        long double a;
         long double in;
     };
 
@@ -29,13 +29,16 @@ class ANN {
     vector<long double> trainOuts;
     vector<long double> testOuts;
 
-    void constructLayers(string);
-    void getWeights(string);
-    void getDigitEncodings(string);
-    void getIns(string, vector< vector<long double> >&);
-    void getOuts(string, vector<long double>&);
+    void constructLayers(char*);
+    void getWeights(char*);
+    void getDigitEncodings(char*);
+    void getIns(char*, vector< vector<long double> >&);
+    void getOuts(char*, vector<long double>&);
+
+    long double getIn(int, int);
+    void g(int, int);
 
 
     public:
-    ANN(string, string, string, string, string, string, string, long double, int);
+    ANN(char*, char*, char*, char*, char*, char*, char*, long double, int);
 };

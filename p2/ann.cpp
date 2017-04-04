@@ -3,7 +3,7 @@
 ANN::ANN(char* train_input, char* train_out, char* test_input, char* test_out, char* structure, char* weights, char* encoding, long double a, int numIters) {
     constructLayers(structure);
     getWeights(weights);
-//    getDigitEncodings(encoding);
+    getDigitEncodings(encoding);
 //    getOuts(train_out, trainOuts);
 //    getOuts(test_out, testOuts);
 //    getIns(train_input, trainIns);
@@ -54,11 +54,13 @@ void ANN::getWeights(char* fname) {
 void ANN::getDigitEncodings(char* fname) {
     ifstream f(fname);
 
+    encodings.resize(10);
+
     long double curVal;
     for(int d=0; d<10; d++) {
         for(int i=0; i<10; i++) {
             f >> curVal;
-            encodings[d][i] = curVal;
+            encodings[d].push_back(curVal);
         }
     }
 

@@ -38,7 +38,12 @@ class ANN {
     long double getIn(int, int);
     void g(int, int);
 
+    void printWeights();
+
 
     public:
     ANN(char*, char*, char*, char*, char*, char*, char*, long double, int);
+    void backPropogate();
+    void classify();
+    void printAccuracy();
 };

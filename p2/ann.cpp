@@ -101,12 +101,30 @@ void ANN::getOuts(char* fname, vector<long double> &outputs) {
     f.close();
 }
 
+// print weights of 1st node to all nodes it's attached to
+void ANN::printWeights() {
+
+}
+
 long double ANN::getIn(int l, int n) {
     return 1;
 }
 
 void ANN::g(int l, int n) {
     
+}
+
+//MAIN PUBLIC INTERFACE//
+void ANN::backPropogate() {
+
+}
+
+void ANN::classify() {
+
+}
+
+void ANN::printAccuracy() {
+
 }
 
 

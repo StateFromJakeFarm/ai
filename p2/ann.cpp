@@ -76,7 +76,7 @@ void ANN::getIns(char* fname, vector< vector<long double> > &inputs) {
     string line;
     long double curVal;
     while(getline(f, line)) {
-        inputs.resize(inputs.size()+1);
+        inputs.resize(curLine+1);
 
         istringstream ss(line);
 
@@ -84,6 +84,15 @@ void ANN::getIns(char* fname, vector< vector<long double> > &inputs) {
             ss >> curVal;
             inputs[curLine].push_back(curVal);
         }
+
+        ++curLine;
+    }
+
+    for(unsigned int i=0; i<inputs.size(); i++) {
+        for(unsigned int q=0; q<inputs[i].size(); q++) {
+            cout << inputs[i][q] << " ";
+        }
+        cout << endl;
     }
 
     f.close();

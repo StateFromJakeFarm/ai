@@ -1,18 +1,6 @@
 #include "ann.h"
 
-ANN::ANN(char* train_input, char* train_out, char* test_input, char* test_out, char* structure, char* weights, char* encoding, long double a, int numIters) {
-    constructLayers(structure);
-    getWeights(weights);
-    getDigitEncodings(encoding);
-    getOuts(train_out, trainOuts);
-    getOuts(test_out, testOuts);
-    getIns(train_input, trainIns);
-    getIns(test_input, testIns);
-
-    alpha = a;
-    k = numIters;
-}
-
+//PARSE INPUT FILES//
 void ANN::constructLayers(char* fname) {
     ifstream f(fname);
 
@@ -106,6 +94,7 @@ void ANN::printWeights() {
 
 }
 
+//NEURON FUNCTIONS//
 long double ANN::getIn(int l, int n) {
     return 1;
 }
@@ -115,6 +104,19 @@ void ANN::g(int l, int n) {
 }
 
 //MAIN PUBLIC INTERFACE//
+ANN::ANN(char* train_input, char* train_out, char* test_input, char* test_out, char* structure, char* weights, char* encoding, long double a, int numIters) {
+    constructLayers(structure);
+    getWeights(weights);
+    getDigitEncodings(encoding);
+    getOuts(train_out, trainOuts);
+    getOuts(test_out, testOuts);
+    getIns(train_input, trainIns);
+    getIns(test_input, testIns);
+
+    alpha = a;
+    k = numIters;
+}
+
 void ANN::backPropogate() {
 
 }

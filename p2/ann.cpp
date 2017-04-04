@@ -4,10 +4,10 @@ ANN::ANN(char* train_input, char* train_out, char* test_input, char* test_out, c
     constructLayers(structure);
     getWeights(weights);
     getDigitEncodings(encoding);
-//    getOuts(train_out, trainOuts);
-//    getOuts(test_out, testOuts);
-//    getIns(train_input, trainIns);
-//    getIns(test_input, testIns);
+    getOuts(train_out, trainOuts);
+    getOuts(test_out, testOuts);
+    getIns(train_input, trainIns);
+    getIns(test_input, testIns);
 
     alpha = a;
     k = numIters;

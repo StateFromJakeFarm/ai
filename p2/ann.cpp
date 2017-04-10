@@ -137,7 +137,8 @@ void ANN::main() {
     // Iterations
     for(int i=0; i<k; i++) {
         // Each input vector
-        for(unsigned int xi=0; xi<trainIns.size(); xi++) {
+//        for(unsigned int xi=0; xi<trainIns.size(); xi++) {
+        for(unsigned int xi=0; xi<1; xi++) {
             int curNeuron = 0;
 
             // Set input ai's to input vector values (1)
@@ -160,25 +161,42 @@ void ANN::main() {
                     ++curNeuron;
                 }
             }
-            curNeuron = 0;
 
             // Get errors for output layer (4)
             int outputL = layers.size()-1;
             for(unsigned int n=0; n<layers[outputL].size(); n++) {
+                --curNeuron;
                 long double an = layers[outputL][n].a;
                 layers[outputL][n].delta = an * (1 - an) * (trainOuts[xi] - an);
+cout << curNeuron << ": " << layers[outputL][n].delta << endl;
             }
 
             // Get errors for layers (output, 1] (5 and 6)
             for(int l=outputL-1; l>0; l++) {
                 for(unsigned int n=0; n<layers[l].size(); n++) {
+                    --curNeuron;
                     long double an = layers[l][n].a;
 
                     // Get sum of products of errors and weights leaving this
                     // neuron
-                    for(unsigned int 
+                    long double productSum = 0;
+                    for(unsigned int j=0; j<layers[l+1].size(); j++) {
+                        productSum += layers[l+1][j].delta * weights[curNeuron][j];
+                    }
+
+                    layers[l][n].delta = an * (1 - an) * productSum;
+cout << curNeuron << ": " << layers[l][n].delta << endl;
                 }
             }
+
+/*
+            // Update weights (7)
+            for(unsigned int n=0; n<weights.size(); n++) {
+                for(unsigned int j=0; j<weights[n].size(); j++) {
+                    weights[n][j] += alpha * layers[
+                }
+            }
+*/
         }
     }
 }

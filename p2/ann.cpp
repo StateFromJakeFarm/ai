@@ -128,21 +128,3 @@ void ANN::classify() {
 void ANN::printAccuracy() {
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

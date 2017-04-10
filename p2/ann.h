@@ -14,9 +14,10 @@ class ANN {
     long double alpha;
     int k;
 
-    // Hold Neurons' input and activation function output
+    // Neurons to compose the network
     struct Neuron {
         long double a;
+        long double delta;
     };
 
     // Actual ANN structure composed of neurons and weights

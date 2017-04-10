@@ -140,13 +140,13 @@ void ANN::main() {
         for(unsigned int xi=0; xi<trainIns.size(); xi++) {
             int curNeuron = 0;
 
-            // Set input ai's to input vector values
+            // Set input ai's to input vector values (1)
             for(int n=0; n<layers[0].size(); n++) {
                 layers[0][n].a = trainIns[xi][n];
                 ++curNeuron;
             }
 
-            // Steps 2 and 3
+            // Get "in" values and activation functions (2 and 3)
             for(unsigned int l=1; l<layers.size(); l++) {
                 for(unsigned int n=0; n<layers[l].size(); n++) {
                     // Get "in" value for this neuron
@@ -158,6 +158,25 @@ void ANN::main() {
                     layers[l][n].a = 1 / (1 + exp(-1 * in));
 
                     ++curNeuron;
+                }
+            }
+            curNeuron = 0;
+
+            // Get errors for output layer (4)
+            int outputL = layers.size()-1;
+            for(unsigned int n=0; n<layers[outputL].size(); n++) {
+                long double an = layers[outputL][n].a;
+                layers[outputL][n].delta = an * (1 - an) * (trainOuts[xi] - an);
+            }
+
+            // Get errors for layers (output, 1] (5 and 6)
+            for(int l=outputL-1; l>0; l++) {
+                for(unsigned int n=0; n<layers[l].size(); n++) {
+                    long double an = layers[l][n].a;
+
+                    // Get sum of products of errors and weights leaving this
+                    // neuron
+                    for(unsigned int 
                 }
             }
         }

@@ -13,8 +13,7 @@ class ANN {
     long double alpha;
     int k;
 
-    class Neuron {
-        public:
+    struct Neuron {
         long double a;
         long double in;
     };

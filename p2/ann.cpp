@@ -192,11 +192,8 @@ void ANN::main() {
             for(unsigned int l=0; l<layers.size()-1; l++) {
                 for(unsigned int n=0; n<layers[l].size(); n++) {
                     long double an = layers[l][n].a;
-                    for(unsigned int j=0; j<layers[l+1].size(); j++) {
-cout << "BEFORE: " << weights[curNeuron][j] << endl;
+                    for(unsigned int j=0; j<layers[l+1].size(); j++)
                         weights[curNeuron][j] += alpha * an * layers[l+1][j].delta;
-cout << "AFTER: " << weights[curNeuron][j] << endl << endl;
-                    }
                     ++curNeuron;
                 }
             }

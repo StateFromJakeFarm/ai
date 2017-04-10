@@ -168,11 +168,10 @@ void ANN::main() {
                 --curNeuron;
                 long double an = layers[outputL][n].a;
                 layers[outputL][n].delta = an * (1 - an) * (trainOuts[xi] - an);
-cout << curNeuron << ": " << layers[outputL][n].delta << endl;
             }
 
             // Get errors for layers (output, 1] (5 and 6)
-            for(int l=outputL-1; l>0; l++) {
+            for(int l=outputL-1; l>=0; l--) {
                 for(unsigned int n=0; n<layers[l].size(); n++) {
                     --curNeuron;
                     long double an = layers[l][n].a;
@@ -185,7 +184,6 @@ cout << curNeuron << ": " << layers[outputL][n].delta << endl;
                     }
 
                     layers[l][n].delta = an * (1 - an) * productSum;
-cout << curNeuron << ": " << layers[l][n].delta << endl;
                 }
             }
 

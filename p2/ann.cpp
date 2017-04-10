@@ -143,6 +143,7 @@ void ANN::main() {
             // Set input ai's to input vector values
             for(int n=0; n<layers[0].size(); n++) {
                 layers[0][n].a = trainIns[xi][n];
+                cout << "input layer: " << curNeuron << endl;
                 ++curNeuron;
             }
 
@@ -153,6 +154,10 @@ void ANN::main() {
                     long double in = 0;
                     for(int prev=0; prev<layers[l-1].size(); prev++)
                         in += weights[l-1][prev];
+
+                    // Get activation function for this neuron
+                    layers[l][curNeuron].a = 1 / (1 + exp(in));
+                    cout << curNeuron << " " << layers[l][curNeuron].a << endl;
 
                     ++curNeuron;
                 }

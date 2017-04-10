@@ -5,6 +5,7 @@
 #include <vector>
 #include <utility>
 #include <string>
+#include <cmath>
 
 using namespace std;
 
@@ -16,7 +17,6 @@ class ANN {
     // Hold Neurons' input and activation function output
     struct Neuron {
         long double a;
-        long double in;
     };
 
     // Actual ANN structure composed of neurons and weights

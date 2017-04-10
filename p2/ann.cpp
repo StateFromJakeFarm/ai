@@ -95,6 +95,7 @@ void ANN::printWeights() {
 }
 
 //NEURON FUNCTIONS//
+/*
 long double ANN::getIn(int l, int n) {
     return 1;
 }
@@ -102,6 +103,7 @@ long double ANN::getIn(int l, int n) {
 void ANN::g(int l, int n) {
     
 }
+*/
 
 //MAIN PUBLIC INTERFACE//
 ANN::ANN(char* train_input, char* train_out, char* test_input, char* test_out, char* structure, char* weights, char* encoding, long double a, int numIters) {
@@ -115,6 +117,8 @@ ANN::ANN(char* train_input, char* train_out, char* test_input, char* test_out, c
 
     alpha = a;
     k = numIters;
+
+    main();
 }
 
 void ANN::backPropogate() {
@@ -128,3 +132,41 @@ void ANN::classify() {
 void ANN::printAccuracy() {
 
 }
+
+void ANN::main() {
+    // Iterations
+    for(int i=0; i<k; i++) {
+        // Each input vector
+        for(unsigned int xi=0; xi<trainIns.size(); xi++) {
+            int curNeuron = 0;
+
+            // Set input ai's to input vector values
+            for(int n=0; n<layers[0].size(); n++) {
+                layers[0][n].a = trainIns[xi][n];
+                ++curNeuron;
+            }
+
+            // Steps 2 and 3
+            for(unsigned int l=1; l<layers.size(); l++) {
+                for(unsigned int n=0; n<layers[l].size(); n++) {
+                    // Get "in" value for this neuron
+                    long double in = 0;
+                    for(int prev=0; prev<layers[l-1].size(); prev++)
+                        in += weights[l-1][prev];
+
+                    ++curNeuron;
+                }
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+

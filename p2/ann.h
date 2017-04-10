@@ -40,20 +40,24 @@ class ANN {
     void getOuts(char*, vector<long double>&);
 
     // Get input value for neuron
-    long double getIn(int, int);
+//    long double getIn(int);
     // Calculate activation function for neuron
-    void g(int, int);
+//    void g(long double);
 
     void printWeights();
 
 
-    public:
-    // Constructor
-    ANN(char*, char*, char*, char*, char*, char*, char*, long double, int);
     // Run one iteration of back-propagation algo
     void backPropogate();
     // Compare output node values to digit encodings to classify the input
     void classify();
     // Print accuracy of ANN
     void printAccuracy();
+
+    // Run the ANN's main loop
+    void main();
+
+    public:
+    // Constructor
+    ANN(char*, char*, char*, char*, char*, char*, char*, long double, int);
 };

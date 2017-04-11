@@ -36,6 +36,12 @@ void ANN::getWeights(char* fname) {
         }
     }
 
+    // Add dummy weights
+    vector<long double> zeroWeights;
+    for(int i=0; i<curNeuron; i++)
+        zeroWeights.push_back(0.01);
+    weights.insert(weights.begin(), 1, zeroWeights);
+
     f.close();
 }
 

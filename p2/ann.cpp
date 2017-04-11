@@ -38,7 +38,7 @@ void ANN::getWeights(char* fname) {
 
     // Add dummy weights
     vector<long double> zeroWeights;
-    for(int i=0; i<curNeuron; i++)
+    for(int i=0; i<curNeuron+layers[layers.size()-1].size(); i++)
         zeroWeights.push_back(0.01);
     weights.insert(weights.begin(), 1, zeroWeights);
 
@@ -108,7 +108,7 @@ void ANN::printWeights() {
 int curNeuron = layers.size();
     for(unsigned int i=0; i<weights.size(); i++) {
         for(unsigned int j=0; j<weights[i].size(); j++)
-            cout << i << " -> " << j << ": " << weights[i][j] << endl;
+            cout << showpoint << fixed << setprecision(12) << i << " -> " << j << ": " << weights[i][j] << endl;
         cout << endl;
     }
 }
@@ -160,11 +160,14 @@ void ANN::main() {
                 for(unsigned int n=0; n<layers[l].size(); n++) {
                     // Get "in" value for this neuron
                     long double in = 0;
-                    for(int prev=0; prev<layers[l-1].size(); prev++)
-                        in += weights[l-1][prev];
+                    for(unsigned int inNeuron=curNeuron-n; inNeuron>layers[l-1].size(); inNeuron--) {
+                        in += weights[inNeuron][n]*layers[l-1][n].a;
+                    }
 
                     // Get activation function for this neuron
                     layers[l][n].a = 1 / (1 + exp(-1 * in));
+cout << showpoint << fixed << setprecision(12) << "in" << curNeuron+1 << " = " << in << endl;
+cout << showpoint << fixed << setprecision(12) << "a" << curNeuron+1 << " = " << layers[l][n].a << endl << endl;
 
                     ++curNeuron;
                 }
@@ -207,8 +210,6 @@ void ANN::main() {
             }
         }
     }
-
-    printWeights();
 }
 
 

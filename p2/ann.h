@@ -18,11 +18,11 @@ class ANN {
     struct Neuron {
         long double a;
         long double delta;
+        vector<long double> weights;
     };
 
     // Actual ANN structure composed of neurons and weights
     vector< vector<Neuron> > layers;
-    vector< vector<long double> > weights;
 
     // Digit encodings
     vector< vector<long double> > encodings;

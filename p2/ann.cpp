@@ -2,10 +2,12 @@
 
 //PARSE INPUT FILES//
 void ANN::constructLayers(char* fname) {
+    layers.resize(1);
+
     ifstream f(fname);
 
     int numNodes;
-    int numLayers = 0;
+    int numLayers = 1;
     while(f >> numNodes) {
         ++numLayers;
         layers.resize(numLayers);
@@ -18,31 +20,24 @@ void ANN::constructLayers(char* fname) {
 void ANN::getWeights(char* fname) {
     ifstream f(fname);
 
-    int curNeuron = 0;
     long double curWeight;
     // loop through all layers except output layer
     for(unsigned int l=0; l<layers.size()-1; l++) {
         for(unsigned int i=0; i<layers[l].size(); i++) {
-            // add new vector of weights for each new node
-            weights.resize(curNeuron+1);
             // for each node in next layer, add weight to vector for
             // current node
             for(unsigned int n=0; n<layers[l+1].size(); n++) {
                 f >> curWeight;
                 weights[curNeuron].push_back(curWeight);
             }
-
-            ++curNeuron;
         }
     }
 
-    // Add dummy weights
-    vector<long double> zeroWeights;
-    for(int i=0; i<curNeuron+layers[layers.size()-1].size(); i++)
-        zeroWeights.push_back(0.01);
-    weights.insert(weights.begin(), 1, zeroWeights);
+    f.close()
 
-    f.close();
+    // Add dummy weights
+    for(int i=0; i<curNeuron; i++)
+        layers[0][0].weights.push_back(0.01);
 }
 
 void ANN::getDigitEncodings(char* fname) {

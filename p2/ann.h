@@ -40,11 +40,7 @@ class ANN {
     void getIns(char*, vector< vector<long double> >&);
     void getOuts(char*, vector<long double>&);
 
-    // Get input value for neuron
-//    long double getIn(int);
-    // Calculate activation function for neuron
-//    void g(long double);
-
+    // Print weights of first node to all nodes in next layer
     void printWeights();
 
 

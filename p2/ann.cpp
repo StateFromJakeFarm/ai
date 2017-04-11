@@ -91,19 +91,22 @@ void ANN::getOuts(char* fname, vector<long double> &outputs) {
 
 // print weights of 1st node to all nodes it's attached to
 void ANN::printWeights() {
-
-}
-
-//NEURON FUNCTIONS//
 /*
-long double ANN::getIn(int l, int n) {
-    return 1;
+    int curNeuron = layers[0].size();
+    for(unsigned int n=0; n<layers[1].size(); n++) {
+        cout << showpoint << fixed << setprecision(12) << weights[0][curNeuron] << " ";
+        ++curNeuron;
+    }
+    cout << endl;
+*/
+int curNeuron = layers.size();
+    for(unsigned int i=0; i<weights.size(); i++) {
+        for(unsigned int j=0; j<weights[i].size(); j++)
+            cout << i << " -> " << j << ": " << weights[i][j] << endl;
+        cout << endl;
+    }
 }
 
-void ANN::g(int l, int n) {
-    
-}
-*/
 
 //MAIN PUBLIC INTERFACE//
 ANN::ANN(char* train_input, char* train_out, char* test_input, char* test_out, char* structure, char* weights, char* encoding, long double a, int numIters) {
@@ -137,8 +140,7 @@ void ANN::main() {
     // Iterations
     for(int i=0; i<k; i++) {
         // Each input vector
-//        for(unsigned int xi=0; xi<trainIns.size(); xi++) {
-        for(unsigned int xi=0; xi<1; xi++) {
+        for(unsigned int xi=0; xi<trainIns.size(); xi++) {
             int curNeuron = 0;
 
             // Set input ai's to input vector values (1)
@@ -199,6 +201,8 @@ void ANN::main() {
             }
         }
     }
+
+    printWeights();
 }
 
 

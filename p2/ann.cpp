@@ -20,23 +20,27 @@ void ANN::constructLayers(char* fname) {
 void ANN::getWeights(char* fname) {
     ifstream f(fname);
 
+    int numNeurons = 0;
     long double curWeight;
     // loop through all layers except output layer
-    for(unsigned int l=0; l<layers.size()-1; l++) {
-        for(unsigned int i=0; i<layers[l].size(); i++) {
+    for(unsigned int l=1; l<layers.size()-1; l++) {
+        for(unsigned int n=0; n<layers[l].size(); n++) {
             // for each node in next layer, add weight to vector for
             // current node
-            for(unsigned int n=0; n<layers[l+1].size(); n++) {
+            for(unsigned int i=0; i<layers[l+1].size(); i++) {
                 f >> curWeight;
-                weights[curNeuron].push_back(curWeight);
+                layers[l][n].weights.push_back(curWeight);
             }
+
+            ++numNeurons;
         }
     }
 
-    f.close()
+    f.close();
 
     // Add dummy weights
-    for(int i=0; i<curNeuron; i++)
+    layers[0].resize(1);
+    for(int i=0; i<numNeurons+layers[layers.size()-1].size(); i++)
         layers[0][0].weights.push_back(0.01);
 }
 
@@ -100,11 +104,15 @@ void ANN::printWeights() {
     }
     cout << endl;
 */
-int curNeuron = layers.size();
-    for(unsigned int i=0; i<weights.size(); i++) {
-        for(unsigned int j=0; j<weights[i].size(); j++)
-            cout << showpoint << fixed << setprecision(12) << i << " -> " << j << ": " << weights[i][j] << endl;
-        cout << endl;
+    int curNeuron = 0;
+    for(unsigned int l=0; l<layers.size(); l++) {
+        for(unsigned int n=0; n<layers[l].size(); n++) {
+            cout << curNeuron << ": ";
+            for(unsigned int w=0; w<layers[l][n].weights.size(); w++)
+                cout << layers[l][n].weights[w] << " ";
+            cout << endl;
+            ++curNeuron;
+        }
     }
 }
 
@@ -122,7 +130,8 @@ ANN::ANN(char* train_input, char* train_out, char* test_input, char* test_out, c
     alpha = a;
     k = numIters;
 
-    main();
+//    main();
+printWeights();
 }
 
 void ANN::backPropogate() {
@@ -138,6 +147,7 @@ void ANN::printAccuracy() {
 }
 
 void ANN::main() {
+/*
     // Iterations
     for(int i=0; i<k; i++) {
         // Each input vector
@@ -205,6 +215,7 @@ cout << showpoint << fixed << setprecision(12) << "a" << curNeuron+1 << " = " <<
             }
         }
     }
+*/
 }
 
 

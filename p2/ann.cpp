@@ -7,7 +7,7 @@ void ANN::constructLayers(char* fname) {
     ifstream f(fname);
 
     int numNodes;
-    int numLayers = 1;
+    int numLayers = 0;
     while(f >> numNodes) {
         ++numLayers;
         layers.resize(numLayers);
@@ -23,12 +23,18 @@ void ANN::getWeights(char* fname) {
     int numNeurons = 0;
     long double curWeight;
     // loop through all layers except output layer
-    for(unsigned int l=1; l<layers.size()-1; l++) {
+    for(unsigned int l=0; l<layers.size()-1; l++) {
+        // add dummy 0 neuron
+        layers[l].resize(layers[l].size()+1);
+
         for(unsigned int n=0; n<layers[l].size(); n++) {
             // for each node in next layer, add weight to vector for
             // current node
             for(unsigned int i=0; i<layers[l+1].size(); i++) {
-                f >> curWeight;
+                if(n == 0)
+                    curWeight = 0.01;
+                else
+                    f >> curWeight;
                 layers[l][n].weights.push_back(curWeight);
             }
 
@@ -37,11 +43,6 @@ void ANN::getWeights(char* fname) {
     }
 
     f.close();
-
-    // Add dummy weights
-    layers[0].resize(1);
-    for(int i=0; i<numNeurons+layers[layers.size()-1].size(); i++)
-        layers[0][0].weights.push_back(0.01);
 }
 
 void ANN::getDigitEncodings(char* fname) {
@@ -130,8 +131,8 @@ ANN::ANN(char* train_input, char* train_out, char* test_input, char* test_out, c
     alpha = a;
     k = numIters;
 
+    printWeights();
 //    main();
-printWeights();
 }
 
 void ANN::backPropogate() {
@@ -146,33 +147,43 @@ void ANN::printAccuracy() {
 
 }
 
+void ANN::printNeuron(int l, int n) {
+    cout << "Layer: " << l << ", n: " << n << endl;
+    cout << "  ai:    " << layers[l][n].a << endl;
+    cout << "  delta: " << layers[l][n].delta << endl;
+    cout << "  weights:" << endl;
+    for(unsigned int i=0; i<layers[l][n].weights.size(); i++)
+        cout << "    -> " << n << ": " << layers[l][n].weights[i] << endl;
+    cout << endl;
+}
+
 void ANN::main() {
-/*
     // Iterations
     for(int i=0; i<k; i++) {
         // Each input vector
         for(unsigned int xi=0; xi<trainIns.size(); xi++) {
             int curNeuron = 0;
 
+            // Set ai for layer 0 to 1
+            layers[0][0].a = 1;
+
             // Set input ai's to input vector values (1)
-            for(int n=0; n<layers[0].size(); n++) {
-                layers[0][n].a = trainIns[xi][n];
+            for(int n=0; n<layers[1].size(); n++) {
+                layers[1][n].a = trainIns[xi][n];
                 ++curNeuron;
             }
 
             // Get "in" values and activation functions (2 and 3)
-            for(unsigned int l=1; l<layers.size(); l++) {
+            for(unsigned int l=2; l<layers.size(); l++) {
                 for(unsigned int n=0; n<layers[l].size(); n++) {
                     // Get "in" value for this neuron
                     long double in = 0;
-                    for(unsigned int inNeuron=curNeuron-n; inNeuron>layers[l-1].size(); inNeuron--) {
-                        in += weights[inNeuron][n]*layers[l-1][n].a;
+                    for(unsigned int i=0; i<layers[l-1].size(); i++) {
+                        in += layers[l-1][i].weights[n] * layers[l-1][n].a;
                     }
 
                     // Get activation function for this neuron
                     layers[l][n].a = 1 / (1 + exp(-1 * in));
-cout << showpoint << fixed << setprecision(12) << "in" << curNeuron+1 << " = " << in << endl;
-cout << showpoint << fixed << setprecision(12) << "a" << curNeuron+1 << " = " << layers[l][n].a << endl << endl;
 
                     ++curNeuron;
                 }
@@ -196,7 +207,7 @@ cout << showpoint << fixed << setprecision(12) << "a" << curNeuron+1 << " = " <<
                     // neuron
                     long double productSum = 0;
                     for(unsigned int j=0; j<layers[l+1].size(); j++) {
-                        productSum += layers[l+1][j].delta * weights[curNeuron][j];
+                        productSum += layers[l+1][j].delta * layers[l][n].weights[j];
                     }
 
                     layers[l][n].delta = an * (1 - an) * productSum;
@@ -204,18 +215,16 @@ cout << showpoint << fixed << setprecision(12) << "a" << curNeuron+1 << " = " <<
             }
 
             // Update weights (7)
-            curNeuron = 0;
             for(unsigned int l=0; l<layers.size()-1; l++) {
                 for(unsigned int n=0; n<layers[l].size(); n++) {
                     long double an = layers[l][n].a;
                     for(unsigned int j=0; j<layers[l+1].size(); j++)
-                        weights[curNeuron][j] += alpha * an * layers[l+1][j].delta;
+                        layers[l][n].weights[j] += alpha * an * layers[l+1][j].delta;
                     ++curNeuron;
                 }
             }
         }
     }
-*/
 }
 
 

@@ -83,7 +83,7 @@ void ANN::getIns(char* fname, vector< vector<long double> > &inputs) {
     f.close();
 }
 
-void ANN::getOuts(char* fname, vector<long double> &outputs) {
+void ANN::getOuts(char* fname, vector<int> &outputs) {
     ifstream f(fname);
 
     long double curVal;
@@ -95,21 +95,9 @@ void ANN::getOuts(char* fname, vector<long double> &outputs) {
 
 // print weights of 1st node to all nodes it's attached to
 void ANN::printWeights() {
-/*
     for(unsigned int j=0; j<layers[2].size(); j++)
         cout << showpoint << fixed << setprecision(12) << layers[1][0].weights[j] << " ";
     cout << endl;
-*/
-    int curNeuron = 0;
-    for(unsigned int l=0; l<layers.size()-1; l++) {
-        for(unsigned int n=0; n<layers[l].size(); n++) {
-            cout << curNeuron << ": ";
-            for(unsigned int w=0; w<layers[l][n].weights.size(); w++)
-                cout << showpoint << fixed << setprecision(12) << layers[l][n].weights[w] << " ";
-            cout << endl;
-            ++curNeuron;
-        }
-    }
 }
 
 
@@ -158,18 +146,14 @@ void ANN::main() {
                 for(unsigned int n=0; n<layers[l].size(); n++) {
                     // Get "in" value for this neuron
                     long double in = layers[0][0].weights[curNeuron];
-//cout << in << " + ";
-                    for(unsigned int p=0; p<layers[l-1].size(); p++) {
+                    for(unsigned int p=0; p<layers[l-1].size(); p++)
                         in += layers[l-1][p].weights[n] * layers[l-1][p].a;
-//cout << layers[l-1][p].a<<"*"<<layers[l-1][p].weights[n]<<"+";
-                    }
-//cout << " = " << in << endl;
+
                     // Get activation function for this neuron
                     layers[l][n].a = 1 / (1 + exp(-1 * in));
                     ++curNeuron;
                 }
             }
-//cout << endl;
 
             // Get errors for output layer (4)
             int outputL = layers.size()-1;

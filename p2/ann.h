@@ -30,15 +30,15 @@ class ANN {
     // Train + test input/output
     vector< vector<long double> > trainIns;
     vector< vector<long double> > testIns;
-    vector<long double> trainOuts;
-    vector<long double> testOuts;
+    vector<int> trainOuts;
+    vector<int> testOuts;
 
     // Construct ANN and get input/output
     void constructLayers(char*);
     void getWeights(char*);
     void getDigitEncodings(char*);
     void getIns(char*, vector< vector<long double> >&);
-    void getOuts(char*, vector<long double>&);
+    void getOuts(char*, vector<int>&);
 
     // Print weights of first node to all nodes in next layer
     void printWeights();

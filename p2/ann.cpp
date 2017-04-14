@@ -208,7 +208,6 @@ void ANN::main() {
             }
         }
     }
-printWeights();
 }
 
 

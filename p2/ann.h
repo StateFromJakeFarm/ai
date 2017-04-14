@@ -42,16 +42,15 @@ class ANN {
 
     // Print weights of first node to all nodes in next layer
     void printWeights();
-    void printNeuron(int, int);
 
 
     void calcActivations(vector< vector<long double> >, int);
     // Run one iteration of back-propagation algo (updating weights)
-    void backPropogate(vector< vector<long double> >, vector<int>, bool);
+    void backPropogate(vector< vector<long double> >, vector<int>);
     // Compare output node values to digit encodings to classify the input
     void classify();
     // Print accuracy of ANN
-    void printAccuracy();
+    void printAccuracy(int);
 
     // Run the ANN's main loop
     void main();

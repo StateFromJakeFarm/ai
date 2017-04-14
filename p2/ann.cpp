@@ -139,69 +139,76 @@ void ANN::calcActivations(vector< vector<long double> > ins, int xi) {
     }
 }
 
-void ANN::backPropogate(vector< vector<long double> > ins, vector<int> outs, bool update) {
+void ANN::backPropogate(vector< vector<long double> > ins, vector<int> outs) {
+    long double smallestDist = 0;
+
     // Each input vector
     for(unsigned int xi=0; xi<ins.size(); xi++) {
         // Get activation function values for all nodes after input layer
         calcActivations(ins, xi);
 
-        if(update) {
-            // Get errors for output layer (4)
-            int outputL = layers.size()-1;
-            for(unsigned int n=0; n<layers[outputL].size(); n++) {
-                long double an = layers[outputL][n].a;
-                layers[outputL][n].delta = an * (1 - an) * (encodings[outs[xi]][n] - an);
-            }
+        // Get errors for output layer (4)
+        int outputL = layers.size()-1;
+        for(unsigned int n=0; n<layers[outputL].size(); n++) {
+            long double an = layers[outputL][n].a;
+            layers[outputL][n].delta = an * (1 - an) * (encodings[outs[xi]][n] - an);
+        }
 
-            // Get errors for layers (output, 1] (5 and 6)
-            for(int l=outputL-1; l>0; l--) {
-                for(unsigned int n=0; n<layers[l].size(); n++) {
-                    long double an = layers[l][n].a;
+        // Get errors for layers (output, 1] (5 and 6)
+        for(int l=outputL-1; l>0; l--) {
+            for(unsigned int n=0; n<layers[l].size(); n++) {
+                long double an = layers[l][n].a;
 
-                    // Get sum of products of errors and weights leaving this
-                    // neuron
-                    long double productSum = 0;
-                    for(unsigned int j=0; j<layers[l+1].size(); j++) {
-                        productSum += layers[l+1][j].delta * layers[l][n].weights[j];
-                    }
-
-                    layers[l][n].delta = an * (1 - an) * productSum;
+                // Get sum of products of errors and weights leaving this
+                // neuron
+                long double productSum = 0;
+                for(unsigned int j=0; j<layers[l+1].size(); j++) {
+                    productSum += layers[l+1][j].delta * layers[l][n].weights[j];
                 }
-            }
 
-            // Update weights (7)
-            int curNeuron = 0;
-            for(unsigned int l=2; l<layers.size(); l++) {
-                for(unsigned int j=0; j<layers[l].size(); j++) {
-                    layers[0][0].weights[curNeuron] += alpha * layers[l][j].delta;
-                    ++curNeuron;
-                }
+                layers[l][n].delta = an * (1 - an) * productSum;
             }
+        }
 
-            for(unsigned int l=1; l<layers.size()-1; l++) {
-                for(unsigned int n=0; n<layers[l].size(); n++) {
-                    for(unsigned int j=0; j<layers[l+1].size(); j++)
-                        layers[l][n].weights[j] += alpha * layers[l][n].a * layers[l+1][j].delta;
-                }
+        // Update weights (7)
+        int curNeuron = 0;
+        for(unsigned int l=2; l<layers.size(); l++) {
+            for(unsigned int j=0; j<layers[l].size(); j++) {
+                layers[0][0].weights[curNeuron] += alpha * layers[l][j].delta;
+                ++curNeuron;
             }
-        } else {
-            classify();
+        }
+
+        for(unsigned int l=1; l<layers.size()-1; l++) {
+            for(unsigned int n=0; n<layers[l].size(); n++) {
+                for(unsigned int j=0; j<layers[l+1].size(); j++)
+                    layers[l][n].weights[j] += alpha * layers[l][n].a * layers[l+1][j].delta;
+            }
         }
     }
 }
 
 void ANN::classify() {
+    int numCorrect = 0;
+    for(unsigned int i=0; i<layers[layers.size()-1].size(); i++) {
 
+    }
+
+    printAccuracy(numCorrect);
 }
 
-void ANN::printAccuracy() {
+void ANN::printAccuracy(int numCorrect) {
 
 }
 
 void ANN::main() {
     // Iterations
     for(int i=0; i<k; i++)
-        backPropogate(trainIns, trainOuts, true);
+        backPropogate(trainIns, trainOuts);
 
+    // Print weights from first input neuron to next layer neurons
     printWeights();
+
+    // Classify the testing data
+    classify();
 }

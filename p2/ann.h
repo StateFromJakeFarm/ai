@@ -42,6 +42,7 @@ class ANN {
 
     // Print weights of first node to all nodes in next layer
     void printWeights();
+    void printNeuron(int, int);
 
 
     // Run one iteration of back-propagation algo

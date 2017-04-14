@@ -190,8 +190,10 @@ void ANN::backPropogate(vector< vector<long double> > ins, vector<int> outs) {
 
 void ANN::classify() {
     int numCorrect = 0;
-    for(unsigned int i=0; i<layers[layers.size()-1].size(); i++) {
+    for(unsigned int xi=0; xi<layers[layers.size()-1].size(); xi++) {
+        calcActivations(testIns, xi);
 
+        // euclidean distance for digit from my ais
     }
 
     printAccuracy(numCorrect);

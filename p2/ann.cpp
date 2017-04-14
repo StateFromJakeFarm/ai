@@ -189,18 +189,33 @@ void ANN::backPropogate(vector< vector<long double> > ins, vector<int> outs) {
 }
 
 void ANN::classify() {
-    int numCorrect = 0;
-    for(unsigned int xi=0; xi<layers[layers.size()-1].size(); xi++) {
+    long double numCorrect = 0;
+    for(unsigned int xi=0; xi<testIns.size(); xi++) {
         calcActivations(testIns, xi);
 
-        // euclidean distance for digit from my ais
+        // Find Euclidean distance between output layer and all digits
+        long double minDist = INT_MAX;
+        int minDigit;
+        long double curDist = 0;
+        int outputL = layers.size()-1;
+        for(unsigned int d=0; d<10; d++) {
+            for(unsigned int n=0; n<layers[outputL].size(); n++)
+                curDist += pow(layers[outputL][n].a - encodings[d][n], 2);
+            curDist = sqrt(curDist);
+
+            if(curDist < minDist) {
+                minDist = curDist;
+                minDigit = d;
+            }
+        }
+
+        cout << minDigit << endl;
+
+        if(minDigit == testOuts[xi])
+            ++numCorrect;
     }
 
-    printAccuracy(numCorrect);
-}
-
-void ANN::printAccuracy(int numCorrect) {
-
+    cout << showpoint << fixed << setprecision(12) << numCorrect / testOuts.size() << endl;
 }
 
 void ANN::main() {

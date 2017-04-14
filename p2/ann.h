@@ -6,6 +6,7 @@
 #include <utility>
 #include <string>
 #include <cmath>
+#include <climits>
 
 using namespace std;
 
@@ -49,8 +50,6 @@ class ANN {
     void backPropogate(vector< vector<long double> >, vector<int>);
     // Compare output node values to digit encodings to classify the input
     void classify();
-    // Print accuracy of ANN
-    void printAccuracy(int);
 
     // Run the ANN's main loop
     void main();

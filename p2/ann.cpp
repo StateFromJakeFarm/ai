@@ -115,51 +115,42 @@ ANN::ANN(char* train_input, char* train_out, char* test_input, char* test_out, c
     k = numIters;
 
     main();
-    printWeights();
 }
 
-void ANN::backPropogate() {
+void ANN::calcActivations(vector< vector<long double> > ins, int xi) {
+    // Set input activation values to input vector values (1)
+    for(int n=0; n<layers[1].size(); n++) {
+        layers[1][n].a = ins[xi][n];
+    }
 
+    // Get "in" values and activation functions (2 and 3)
+    int curNeuron = 0;
+    for(unsigned int l=2; l<layers.size(); l++) {
+        for(unsigned int n=0; n<layers[l].size(); n++) {
+            // Get "in" value for this neuron
+            long double in = layers[0][0].weights[curNeuron];
+            for(unsigned int j=0; j<layers[l-1].size(); j++)
+                in += layers[l-1][j].weights[n] * layers[l-1][j].a;
+
+            // Get activation function for this neuron
+            layers[l][n].a = 1 / (1 + exp(-1 * in));
+            ++curNeuron;
+        }
+    }
 }
 
-void ANN::classify() {
+void ANN::backPropogate(vector< vector<long double> > ins, vector<int> outs, bool update) {
+    // Each input vector
+    for(unsigned int xi=0; xi<ins.size(); xi++) {
+        // Get activation function values for all nodes after input layer
+        calcActivations(ins, xi);
 
-}
-
-void ANN::printAccuracy() {
-
-}
-
-void ANN::main() {
-    // Iterations
-    for(int i=0; i<k; i++) {
-        // Each input vector
-        for(unsigned int xi=0; xi<trainIns.size(); xi++) {
-            // Set input ai's to input vector values (1)
-            for(int n=0; n<layers[1].size(); n++) {
-                layers[1][n].a = trainIns[xi][n];
-            }
-
-            // Get "in" values and activation functions (2 and 3)
-            int curNeuron = 0;
-            for(unsigned int l=2; l<layers.size(); l++) {
-                for(unsigned int n=0; n<layers[l].size(); n++) {
-                    // Get "in" value for this neuron
-                    long double in = layers[0][0].weights[curNeuron];
-                    for(unsigned int p=0; p<layers[l-1].size(); p++)
-                        in += layers[l-1][p].weights[n] * layers[l-1][p].a;
-
-                    // Get activation function for this neuron
-                    layers[l][n].a = 1 / (1 + exp(-1 * in));
-                    ++curNeuron;
-                }
-            }
-
+        if(update) {
             // Get errors for output layer (4)
             int outputL = layers.size()-1;
             for(unsigned int n=0; n<layers[outputL].size(); n++) {
                 long double an = layers[outputL][n].a;
-                layers[outputL][n].delta = an * (1 - an) * (encodings[trainOuts[xi]][n] - an);
+                layers[outputL][n].delta = an * (1 - an) * (encodings[outs[xi]][n] - an);
             }
 
             // Get errors for layers (output, 1] (5 and 6)
@@ -179,7 +170,7 @@ void ANN::main() {
             }
 
             // Update weights (7)
-            curNeuron = 0;
+            int curNeuron = 0;
             for(unsigned int l=2; l<layers.size(); l++) {
                 for(unsigned int j=0; j<layers[l].size(); j++) {
                     layers[0][0].weights[curNeuron] += alpha * layers[l][j].delta;
@@ -193,16 +184,24 @@ void ANN::main() {
                         layers[l][n].weights[j] += alpha * layers[l][n].a * layers[l+1][j].delta;
                 }
             }
+        } else {
+            classify();
         }
     }
 }
 
+void ANN::classify() {
 
+}
 
+void ANN::printAccuracy() {
 
+}
 
+void ANN::main() {
+    // Iterations
+    for(int i=0; i<k; i++)
+        backPropogate(trainIns, trainOuts, true);
 
-
-
-
-
+    printWeights();
+}

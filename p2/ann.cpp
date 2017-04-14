@@ -41,8 +41,7 @@ void ANN::getWeights(char* fname) {
     // Add dummy weights
     layers[0].resize(1);
     for(int i=layers[1].size(); i<numNeurons+layers[layers.size()-1].size(); i++)
-/////////THIHIHISHISHI?????/////
-        layers[0][0].weights.push_back(1);
+        layers[0][0].weights.push_back(0.01);
 }
 
 void ANN::getDigitEncodings(char* fname) {
@@ -97,11 +96,8 @@ void ANN::getOuts(char* fname, vector<long double> &outputs) {
 // print weights of 1st node to all nodes it's attached to
 void ANN::printWeights() {
 /*
-    int curNeuron = layers[0].size();
-    for(unsigned int n=0; n<layers[1].size(); n++) {
-        cout << showpoint << fixed << setprecision(12) << weights[0][curNeuron] << " ";
-        ++curNeuron;
-    }
+    for(unsigned int j=0; j<layers[2].size(); j++)
+        cout << showpoint << fixed << setprecision(12) << layers[1][0].weights[j] << " ";
     cout << endl;
 */
     int curNeuron = 0;
@@ -157,24 +153,29 @@ void ANN::main() {
             }
 
             // Get "in" values and activation functions (2 and 3)
+            int curNeuron = 0;
             for(unsigned int l=2; l<layers.size(); l++) {
                 for(unsigned int n=0; n<layers[l].size(); n++) {
                     // Get "in" value for this neuron
-                    long double in = layers[0][0].weights[n];
-                    for(unsigned int p=0; p<layers[l-1].size(); p++)
+                    long double in = layers[0][0].weights[curNeuron];
+//cout << in << " + ";
+                    for(unsigned int p=0; p<layers[l-1].size(); p++) {
                         in += layers[l-1][p].weights[n] * layers[l-1][p].a;
-
+//cout << layers[l-1][p].a<<"*"<<layers[l-1][p].weights[n]<<"+";
+                    }
+//cout << " = " << in << endl;
                     // Get activation function for this neuron
                     layers[l][n].a = 1 / (1 + exp(-1 * in));
-cout << layers[l][n].a << endl;
+                    ++curNeuron;
                 }
             }
+//cout << endl;
 
             // Get errors for output layer (4)
             int outputL = layers.size()-1;
             for(unsigned int n=0; n<layers[outputL].size(); n++) {
                 long double an = layers[outputL][n].a;
-                layers[outputL][n].delta = an * (1 - an) * (trainOuts[n] - an);
+                layers[outputL][n].delta = an * (1 - an) * (encodings[trainOuts[xi]][n] - an);
             }
 
             // Get errors for layers (output, 1] (5 and 6)
@@ -194,7 +195,7 @@ cout << layers[l][n].a << endl;
             }
 
             // Update weights (7)
-            int curNeuron = 0;
+            curNeuron = 0;
             for(unsigned int l=2; l<layers.size(); l++) {
                 for(unsigned int j=0; j<layers[l].size(); j++) {
                     layers[0][0].weights[curNeuron] += alpha * layers[l][j].delta;

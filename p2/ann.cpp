@@ -173,11 +173,11 @@ cout << endl;
             int outputL = layers.size()-1;
             for(unsigned int n=0; n<layers[outputL].size(); n++) {
                 long double an = layers[outputL][n].a;
-                layers[outputL][n].delta = an * (1 - an) * (trainOuts[xi] - an);
+                layers[outputL][n].delta = an * (1 - an) * (trainOuts[n] - an);
             }
 
             // Get errors for layers (output, 1] (5 and 6)
-            for(int l=outputL-1; l>=0; l--) {
+            for(int l=outputL-1; l>0; l--) {
                 for(unsigned int n=0; n<layers[l].size(); n++) {
                     long double an = layers[l][n].a;
 
@@ -185,6 +185,7 @@ cout << endl;
                     // neuron
                     long double productSum = 0;
                     for(unsigned int j=0; j<layers[l+1].size(); j++) {
+                        productSum += layers[l+1][j].delta * layers[l][n].weights[j];
                     }
 
                     layers[l][n].delta = an * (1 - an) * productSum;

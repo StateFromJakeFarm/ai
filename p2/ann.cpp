@@ -191,17 +191,24 @@ void ANN::main() {
             }
 
             // Update weights (7)
+            int curNeuron = 0;
+            for(unsigned int l=1; l<layers.size(); l++) {
+                for(unsigned int j=0; j<layers[l].size(); j++) {
+                    layers[0][0].weights[curNeuron] += alpha * layers[l][j].delta;
+                    ++curNeuron;
+                }
+            }
+
             for(unsigned int l=1; l<layers.size()-1; l++) {
                 for(unsigned int n=0; n<layers[l].size(); n++) {
                     long double an = layers[l][n].a;
-                    for(unsigned int j=0; j<layers[l+1].size(); j++) {
+                    for(unsigned int j=0; j<layers[l+1].size(); j++)
                         layers[l][n].weights[j] += alpha * layers[l][n].a * layers[l+1][j].delta;
-cout << layers[l][n].weights[j] << endl;
-                    }
                 }
             }
         }
     }
+printWeights();
 }
 
 

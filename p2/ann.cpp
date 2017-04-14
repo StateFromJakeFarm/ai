@@ -40,8 +40,9 @@ void ANN::getWeights(char* fname) {
 
     // Add dummy weights
     layers[0].resize(1);
-    for(int i=0; i<numNeurons+layers[layers.size()-1].size(); i++)
-        layers[0][0].weights.push_back(0.01);
+    for(int i=layers[1].size(); i<numNeurons+layers[layers.size()-1].size(); i++)
+/////////THIHIHISHISHI?????/////
+        layers[0][0].weights.push_back(1);
 }
 
 void ANN::getDigitEncodings(char* fname) {
@@ -104,11 +105,11 @@ void ANN::printWeights() {
     cout << endl;
 */
     int curNeuron = 0;
-    for(unsigned int l=0; l<layers.size(); l++) {
+    for(unsigned int l=0; l<layers.size()-1; l++) {
         for(unsigned int n=0; n<layers[l].size(); n++) {
             cout << curNeuron << ": ";
             for(unsigned int w=0; w<layers[l][n].weights.size(); w++)
-                cout << layers[l][n].weights[w] << " ";
+                cout << showpoint << fixed << setprecision(12) << layers[l][n].weights[w] << " ";
             cout << endl;
             ++curNeuron;
         }
@@ -130,6 +131,7 @@ ANN::ANN(char* train_input, char* train_out, char* test_input, char* test_out, c
     k = numIters;
 
     main();
+    printWeights();
 }
 
 void ANN::backPropogate() {
@@ -164,6 +166,7 @@ void ANN::main() {
 
                     // Get activation function for this neuron
                     layers[l][n].a = 1 / (1 + exp(-1 * in));
+cout << layers[l][n].a << endl;
                 }
             }
 
@@ -192,7 +195,7 @@ void ANN::main() {
 
             // Update weights (7)
             int curNeuron = 0;
-            for(unsigned int l=1; l<layers.size(); l++) {
+            for(unsigned int l=2; l<layers.size(); l++) {
                 for(unsigned int j=0; j<layers[l].size(); j++) {
                     layers[0][0].weights[curNeuron] += alpha * layers[l][j].delta;
                     ++curNeuron;
@@ -201,7 +204,6 @@ void ANN::main() {
 
             for(unsigned int l=1; l<layers.size()-1; l++) {
                 for(unsigned int n=0; n<layers[l].size(); n++) {
-                    long double an = layers[l][n].a;
                     for(unsigned int j=0; j<layers[l+1].size(); j++)
                         layers[l][n].weights[j] += alpha * layers[l][n].a * layers[l+1][j].delta;
                 }

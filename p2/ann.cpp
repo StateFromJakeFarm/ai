@@ -145,8 +145,6 @@ void ANN::printAccuracy() {
 }
 
 void ANN::main() {
-printWeights();
-cout << endl;
     // Iterations
     for(int i=0; i<k; i++) {
         // Each input vector
@@ -193,9 +191,13 @@ cout << endl;
             }
 
             // Update weights (7)
-            for(unsigned int l=0; l<layers.size()-1; l++) {
+            for(unsigned int l=1; l<layers.size()-1; l++) {
                 for(unsigned int n=0; n<layers[l].size(); n++) {
                     long double an = layers[l][n].a;
+                    for(unsigned int j=0; j<layers[l+1].size(); j++) {
+                        layers[l][n].weights[j] += alpha * layers[l][n].a * layers[l+1][j].delta;
+cout << layers[l][n].weights[j] << endl;
+                    }
                 }
             }
         }

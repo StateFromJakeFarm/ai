@@ -167,10 +167,17 @@ ANN::ANN(char* train_input, char* train_out, char* test_input, char* test_out, c
     main();
 }
 
-void ANN::calcActivations(vector< vector<long double> > ins, int xi) {
+/**
+ * Set the activation values for the input layer and then calculate the values
+ * for all of the following layers.
+ *
+ * @param ins A vector of long doubles containing the activation values for the
+ *        input layer.
+ **/
+void ANN::calcActivations(vector<long double> ins) {
     // Set input activation values to input vector values (1)
     for(int n=0; n<layers[1].size(); n++) {
-        layers[1][n].a = ins[xi][n];
+        layers[1][n].a = ins[n];
     }
 
     // Get "in" values and activation functions (2 and 3)
@@ -189,11 +196,15 @@ void ANN::calcActivations(vector< vector<long double> > ins, int xi) {
     }
 }
 
+/**
+ * Run the backpropogation algorithm to update the weights to train the ANN for
+ * one iteration over the entire training set.
+ **/
 void ANN::backPropogate() {
     // Each input vector
     for(unsigned int xi=0; xi<trainIns.size(); xi++) {
         // Get activation function values for all nodes after input layer
-        calcActivations(trainIns, xi);
+        calcActivations(trainIns[xi]);
 
         // Get errors for output layer (4)
         int outputL = layers.size()-1;
@@ -236,10 +247,14 @@ void ANN::backPropogate() {
     }
 }
 
+/**
+ * Classify all testing inputs and compare to the proper classifications.
+ * Prints each classification followed by the accurracy of the ANN.
+ **/
 void ANN::classify() {
     long double numCorrect = 0;
     for(unsigned int xi=0; xi<testIns.size(); xi++) {
-        calcActivations(testIns, xi);
+        calcActivations(testIns[xi]);
 
         // Find Euclidean distance between output layer and all digits
         long double minDist = LONG_MAX;
@@ -271,6 +286,9 @@ void ANN::classify() {
     cout << showpoint << fixed << setprecision(12) << numCorrect / testOuts.size() << endl;
 }
 
+/**
+ * Learn weights and then test accurracy of ANN.
+ **/
 void ANN::main() {
     // Iterations
     for(int i=0; i<k; i++)

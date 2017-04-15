@@ -12,7 +12,9 @@ using namespace std;
 
 class ANN {
     private:
+    // alpha value
     long double alpha;
+    // number of training iterations
     int k;
 
     // Neurons to compose the network
@@ -34,7 +36,7 @@ class ANN {
     vector<int> trainOuts;
     vector<int> testOuts;
 
-    // Construct ANN and get input/output
+    // Construct ANN and get input/output data sets
     void constructLayers(char*);
     void getWeights(char*);
     void getDigitEncodings(char*);
@@ -43,9 +45,8 @@ class ANN {
 
     // Print weights of first node to all nodes in next layer
     void printWeights();
-
-
-    void calcActivations(vector< vector<long double> >, int);
+    // Calculate the activation functions for all neurons
+    void calcActivations(vector<long double>);
     // Run one iteration of back-propagation algo (updating weights)
     void backPropogate();
     // Compare output node values to digit encodings to classify the input

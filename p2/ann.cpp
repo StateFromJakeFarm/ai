@@ -60,6 +60,11 @@ void ANN::getWeights(char* fname) {
         layers[0][0].weights.push_back(0.01);
 }
 
+/**
+ * Retrieve the 10-value digit encodings for all 10 digits.
+ *
+ * @param fname A character pointer to the name of the 'encodings' file.
+ **/
 void ANN::getDigitEncodings(char* fname) {
     ifstream f(fname);
 
@@ -76,6 +81,15 @@ void ANN::getDigitEncodings(char* fname) {
     f.close();
 }
 
+/**
+ * Retrieve the values for the input layer nodes from either the train or test
+ * input files.  These values will serve as the activation values for the
+ * first layer of neurons.
+ *
+ * @param fname A character pointer to the name of the 'inputs' file.
+ * @param inputs A reference to a 2-dimensional vector of long double type
+ *        where the values will be stored.
+ **/
 void ANN::getIns(char* fname, vector< vector<long double> > &inputs) {
     ifstream f(fname);
 
@@ -99,6 +113,13 @@ void ANN::getIns(char* fname, vector< vector<long double> > &inputs) {
     f.close();
 }
 
+/**
+ * Retrieve the proper digit output values for each training or test input.
+ *
+ * @param fname A character pointer to the name of the outputs file.
+ * @param outputs A vector of integer reference to contain the the correct
+ *        digit classification for each input.
+ **/
 void ANN::getOuts(char* fname, vector<int> &outputs) {
     ifstream f(fname);
 
@@ -109,16 +130,32 @@ void ANN::getOuts(char* fname, vector<int> &outputs) {
     f.close();
 }
 
-// print weights of 1st node to all nodes it's attached to
+/**
+ * Print out the weights from the first nueron in the input layer to all
+ * nuerons in the second (hidden) layer.
+ **/
 void ANN::printWeights() {
     for(unsigned int j=0; j<layers[2].size(); j++)
         cout << showpoint << fixed << setprecision(12) << layers[1][0].weights[j] << " ";
     cout << endl;
 }
 
-
-//MAIN PUBLIC INTERFACE//
-ANN::ANN(char* train_input, char* train_out, char* test_input, char* test_out, char* structure, char* weights, char* encoding, long double a, int numIters) {
+/**
+ * Constructor for the ANN object.  Will both construct the object and call
+ * the main instruction set.
+ *
+ * @param train_input A character pointer to the name of the 'train_inputs' file.
+ * @param train_out A character pointer to the name of the 'train_output' file.
+ * @param test_input A character pointer to the name of the 'test_input' file.
+ * @param test_out A character pointer to the name of the 'test_outputs' file.
+ * @param structure A character pointer to the name of the 'structure' file.
+ * @param encoding A character pointer to the name of the 'encodings' file.
+ * @param a A long double for the alpha.
+ * @param numIters the number of iterations to run the backpropogation algo.
+ *
+ * @return An ANN object.
+ **/
+ANN::ANN(char* train_input, char* train_out, char* test_input, char* test_out, char* structure, char* weights, char* encoding, long double a, int numIters): alpha(a), k(numIters) {
     constructLayers(structure);
     getWeights(weights);
     getDigitEncodings(encoding);
@@ -126,9 +163,6 @@ ANN::ANN(char* train_input, char* train_out, char* test_input, char* test_out, c
     getOuts(test_out, testOuts);
     getIns(train_input, trainIns);
     getIns(test_input, testIns);
-
-    alpha = a;
-    k = numIters;
 
     main();
 }

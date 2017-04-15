@@ -98,6 +98,18 @@ void ANN::printWeights() {
     for(unsigned int j=0; j<layers[2].size(); j++)
         cout << showpoint << fixed << setprecision(12) << layers[1][0].weights[j] << " ";
     cout << endl;
+/*
+int cur = 0;
+for(unsigned int l=0; l<layers.size()-1; l++) {
+    for(unsigned int n=0; n<layers[l].size(); n++) {
+        cout << cur << ": ";
+        for(unsigned int j=0; j<layers[l][n].weights.size(); j++)
+            cout << layers[l][n].weights[j] << " ";
+        cout << endl;
+        ++cur;
+    }
+}
+*/
 }
 
 

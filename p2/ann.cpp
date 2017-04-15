@@ -139,19 +139,17 @@ void ANN::calcActivations(vector< vector<long double> > ins, int xi) {
     }
 }
 
-void ANN::backPropogate(vector< vector<long double> > ins, vector<int> outs) {
-    long double smallestDist = 0;
-
+void ANN::backPropogate() {
     // Each input vector
-    for(unsigned int xi=0; xi<ins.size(); xi++) {
+    for(unsigned int xi=0; xi<trainIns.size(); xi++) {
         // Get activation function values for all nodes after input layer
-        calcActivations(ins, xi);
+        calcActivations(trainIns, xi);
 
         // Get errors for output layer (4)
         int outputL = layers.size()-1;
         for(unsigned int n=0; n<layers[outputL].size(); n++) {
             long double an = layers[outputL][n].a;
-            layers[outputL][n].delta = an * (1 - an) * (encodings[outs[xi]][n] - an);
+            layers[outputL][n].delta = an * (1 - an) * (encodings[trainOuts[xi]][n] - an);
         }
 
         // Get errors for layers (output, 1] (5 and 6)
@@ -194,34 +192,38 @@ void ANN::classify() {
         calcActivations(testIns, xi);
 
         // Find Euclidean distance between output layer and all digits
-        long double minDist = INT_MAX;
-        int minDigit;
+        long double minDist = LONG_MAX;
         long double curDist = 0;
+        int minDigit;
         int outputL = layers.size()-1;
         for(unsigned int d=0; d<10; d++) {
-            for(unsigned int n=0; n<layers[outputL].size(); n++)
+            for(unsigned int n=0; n<10; n++)
                 curDist += pow(layers[outputL][n].a - encodings[d][n], 2);
             curDist = sqrt(curDist);
 
+            // Current best guess
             if(curDist < minDist) {
                 minDist = curDist;
                 minDigit = d;
             }
         }
 
+        // Print our digit choice
         cout << minDigit << endl;
 
+        // Keep track of how many we get right
         if(minDigit == testOuts[xi])
             ++numCorrect;
     }
 
+    // Print accurracy
     cout << showpoint << fixed << setprecision(12) << numCorrect / testOuts.size() << endl;
 }
 
 void ANN::main() {
     // Iterations
     for(int i=0; i<k; i++)
-        backPropogate(trainIns, trainOuts);
+        backPropogate();
 
     // Print weights from first input neuron to next layer neurons
     printWeights();

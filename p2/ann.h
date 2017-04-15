@@ -47,7 +47,7 @@ class ANN {
 
     void calcActivations(vector< vector<long double> >, int);
     // Run one iteration of back-propagation algo (updating weights)
-    void backPropogate(vector< vector<long double> >, vector<int>);
+    void backPropogate();
     // Compare output node values to digit encodings to classify the input
     void classify();
 

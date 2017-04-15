@@ -205,10 +205,11 @@ void ANN::classify() {
 
         // Find Euclidean distance between output layer and all digits
         long double minDist = LONG_MAX;
-        long double curDist = 0;
+        long double curDist;
         int minDigit;
         int outputL = layers.size()-1;
         for(unsigned int d=0; d<10; d++) {
+            curDist = 0;
             for(unsigned int n=0; n<10; n++)
                 curDist += pow(layers[outputL][n].a - encodings[d][n], 2);
             curDist = sqrt(curDist);

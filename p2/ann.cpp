@@ -1,6 +1,17 @@
+/**
+ * @file ann.cpp Definitions for ANN class defined in 'ann.h'
+ *
+ * @author Jacob Hansen
+ * @date 4/14/17
+ **/
+
 #include "ann.h"
 
-//PARSE INPUT FILES//
+/**
+ * Create the layers of the ANN to store all of our Neurons.
+ *
+ * @param fname A character pointer to the name of the 'structure' file.
+ **/
 void ANN::constructLayers(char* fname) {
     layers.resize(1);
 
@@ -17,6 +28,11 @@ void ANN::constructLayers(char* fname) {
     f.close();
 }
 
+/**
+ * Set all the starting weights within the ANN.
+ *
+ * @param fname A character pointer to the name of the 'weights' file.
+ **/
 void ANN::getWeights(char* fname) {
     ifstream f(fname);
 
@@ -98,18 +114,6 @@ void ANN::printWeights() {
     for(unsigned int j=0; j<layers[2].size(); j++)
         cout << showpoint << fixed << setprecision(12) << layers[1][0].weights[j] << " ";
     cout << endl;
-/*
-int cur = 0;
-for(unsigned int l=0; l<layers.size()-1; l++) {
-    for(unsigned int n=0; n<layers[l].size(); n++) {
-        cout << cur << ": ";
-        for(unsigned int j=0; j<layers[l][n].weights.size(); j++)
-            cout << layers[l][n].weights[j] << " ";
-        cout << endl;
-        ++cur;
-    }
-}
-*/
 }
 
 
